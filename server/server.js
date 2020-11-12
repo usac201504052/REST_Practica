@@ -1,22 +1,25 @@
 // Importaciones
-
-// Archivo de configuracion
-require('./config/config.js');
-
+require('./config/config.js'); // Archivo de configuracion
 const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
 const app = express();
 
-const bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+// Procesar peticiones 
+app.use(bodyParser.urlencoded({ extended: false })); //x-www-form-urlencoded
+app.use(bodyParser.json()); // json
 
-const mongoose = require('mongoose');
-// mongoose.connect('mongodb://localhost:27017/escuela', { useNewUrlParser: true, useCreateIndex: true }, (err, res) => {
-//     if (err) throw err;
-//     Console.log('Base de datos ONLINE');
-// })
+// Usar rutas
+app.use(require('./routes/index'));
 
+// Conexion con DB
+mongoose.connect('mongodb://localhost:27017/escuela', { useNewUrlParser: true, useCreateIndex: true }, (err, res) => {
+    if (err) throw err;
+    console.log('Base de datos ONLINE');
+})
 
+// Escuchar en el puerto indicado
 app.listen(process.env.PORT, () => {
     console.log(`Servidor abierto en puerto ${process.env.PORT}`);
 })
